@@ -229,22 +229,141 @@
 
 \begin{frame}
   \frametitle{Quantum Data : Pure States}
-  The state of a quantum variable is described by a vector, as in the case of a randomized classical variable. These state vectors are denoted by $\ket{\psi}$ (pronounced as a ``ket'')
-  eg . $ \ket{\psi} =
-  \begin{Bmatrix}
-    a_0 & a_1
-  \end{Bmatrix} $
-
-  The normalization conditions on a quantum variable are,
-  \begin{align}
-    \forall i, a_i \in \mathbb{C}
-    \sum_i |a_i|^2 = 1
-  \end{align}
+  The state of a system in quantum mechanics are represented by vectors in a (finite dimensional in the case of quantum computing) vector space over the complex numbers. Such spaces are known as Hilbert spaces and the a vector labelled $a$ is denoted by $\ket{a}$. Each vector can be associated with a column vector with complex coefficients, eg. a 4 dimensional Hilbert Space $\mathcal{H}$ can contain vectors such as
+  $
+  \begin{bmatrix}
+    i \\
+    0\\
+    -\frac{1}{2}\\
+    \frac{i\sqrt{3}}{2}\\
+  \end{bmatrix} $
 \end{frame}
 
 \begin{frame}
   \frametitle{Quantum Data: Pure States}
+For a vector $\ket{\psi} = (a_i)$ in the Hilbert space to be a valid state for a quantum variable we must have the following
+\begin{align}
+  \forall i, a_i \in \mathbb{C} \\
+  \sum _i a_i^{\ast}a_i = \sum_i |a_i|^2 = 1
+\end{align}
+Each vector $\ket{\psi}$ is associated with a dual vector $\bra{\psi}$ that equals its conjugate transpose. Since dual vectors map vectors to complex numbers $\bra{\psi}\ket{\phi}$ is a complex number that we call the inner product of $\ket{\psi}$ and $\ket{phi}$. The normalization condition for the state can now be written as
+\[
+  \bra{\psi}\ket{\psi} = 1
+\]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quantum Pure States (Basis and Measurement)}
+  Any vector in a $N$ dimensional space can be written as the sum of $N$ basis vectors. For example, if we have basis vectors $\{\ket{b_1},\ket{b_2},\dots,\ket{b_N}\}$, an arbitrary vector can be written as
+  $
+  \sum\limits_n c_n\ket{b_n}
+  $
+
+  Often a convenient basis is chosen and termed as the computational basis. The $2^n$ basis vectors are labelled by the $2^n$ $n$ bit bitstrings representing the natural numbers from $0$ to $2^n-1$. Here the bit string labelled $j$ has 1 as the $j^{th}$ dimension and 0 everywhere else.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quantum Pure States (Measurement)}
+  A measurement of a pure state corresponds to a basis $\{\ket{b_n}\}$ in the Hilbert space. We associate each basis vector with the outcome $o_n$. Then on measuring in this basis,
+  \begin{itemize}
+  \item We obtain outcome $o_n$ with probability $|\bra{b_n}\ket{\psi}|^2$.
+    
+  \item After the measurement, if we measure $o_n$ the state changes to $b_n$
+  \end{itemize}
+  The whole measurement can be encoded in a Hermitian operator as follows
+  \[
+    H = \sum_i o_i \ket{b_i}\bra{b_i}
+  \]
+  This operator is often termed the observable being measured. A little algebra reveals that the expectation value of the measurement is $\bra{\psi}H\ket{\psi}$
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Linear Operators}
+  A linear operator on a vector space is a linear transformation $T : \mathcal{H} \rightarrow \mathcal{H}$ that maps vectors in $\mathcal{H}$ to vectors in $\mathcal{H}$.
+
+  The outer product of two vectors $\ket{\psi}$ and $\ket{\phi}$ is denoted by $\ket{\psi}\bra{\phi}$. The outer product is a linear operator whose action is defined by
+  $$
+  (\ket{\psi}\bra{\phi})\ket{\lambda}=\ket{\psi}(\bra{\phi}\ket{\lambda}) = (\bra{\phi}\ket{\lambda})\ket{\psi}
+  $$
+
+  The outer product of a vector $\ket{\psi}$ with itself $\ket{\psi}\bra{\psi}$ is an operator that maps each vector $\ket{\lambda}$ to $\bra{\psi}\ket{\lambda}\ket{\psi}$. Thus the operator acts as a projector projecting vectors into the subspace spanned by $\ket{\psi}$
+\end{frame}
+
+\begin{frame}
+  \frametitle{Linear Operators}
+\begin{itemize}    \item Suppose $B = \{\ket{b_1},\ket{b_2},\dots,\ket{b_N}\}$ is an orthonormal basis. Then every linear operator $T$ on $\mathcal{H}$ can be written as
+  $$
+  T = \sum\limits_{1\le m,n \le N} T_{mn}\bra{b_m}\ket{b_n}
+  $$
+  (This representation directly encodes the action of $T$ on each basis vector, which linearly extends to other vectors). This also allows us to write each linear operator as a matrix with $T_mn$ as the $(m,n)$ entry.
+
+  \item The adjoint of an operator $T$ is denoted by $T^\dagger$ and is defined as that linear operator on $\mathcal{H}^*$ that satisfies
+  $$
+  (\bra{\psi}T^\dagger \ket{\phi})^*=\bra{\phi}T\ket{\psi}, \forall \psi,\phi \in \mathcal{H}
+  $$
+
+\item The identity operator $I$ over a Hilbert Space $\mathcal{H}$ maps every vector in $\mathcal{H}$ to itself. For any orthonormal basis $B=\{\ket{b_i}\}$, $I=\sum\limits_i\ket{b_i}\bra{b_i}$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quantum Pure States (Dynamics)}
+  A linear operator that transforms one quantum state to another must preserve the normalization of the final state. Such operators are called unitary operators $U$ and they obey the condition $U^{\dagger}U = I$. (Here $M^{\dagger}$ the conjugate transpose of operator $M$.)
+
+  A quantum program on pure states consists of a series of unitary transforms on quantum variables, combined with some classical control structures.
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Tensor Products}
+  The Tensor product $\otimes$ is used to combine spaces vectors and operators in two Hilbert Spaces $\mathcal{H}_1$ (dimension n) and $\mathcal{H}_2$ (dimension m). Let $\{\ket{b_i}\}$ and $\{\ket{c_j}\}$ be orthonormal bases for $\mathcal{H}_1$ and $\mathcal{H}_2$ respectively. Then the vectors $\{\ket{b_i}\otimes\ket{c_j}\}$ form the basis for the composite space $\mathcal{H}_1 \otimes \mathcal{H}_2$. For, $\ket{\psi}\in \mathcal{H}_1 \ket{\phi} \in \mathcal{H}_2$,
+
+$$
+\ket{\psi}\otimes\ket{\phi} = \sum\limits_{i,j}\bra{b_i}\ket{\psi}\bra{c_j}\ket{\phi}\ket{b_i}\otimes\ket{c_j}
+$$
+
+For operators we require $(A \otimes B)(\ket{\psi}\otimes\ket{\phi})=A\ket{\psi}\otimes B\ket{\phi}$. Similarly to the definition for vectors we have
+$$
+A \otimes B = \sum\limits_{i,j,i',j'} A_{ij}B_{i'j'}(\ket{b_i}\otimes\ket{c_{i'}})(\bra{b_j}\otimes\bra{c_{j'}})
+$$
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quantum Mixed States}
+  Consider a situation where there is some classical uncertainty in which quantum state we are given. Specifically, we have an ensemble $\{(p_i,\ket{\psi_i}\}$, that is we have probability $p_i$ of getting state $\psi_i$. We can encode this whole ensemble into a system known as a density matrix.
+\[
+  \rho = \sum_i p_i \ket{\psi_i}\bra{\psi_i}
+\]
+The density matrix $\rho$ has the following properties.
+\begin{itemize}
+\item $Tr(\rho) = 1$. This happens because the sum of probabilities must be 1.
+\item $\rho$ is positive semi-definite. As we can see, all the eigenvalues must lie between 0 and 1.
+\end{itemize}
+With this understanding we can use density matrices themselves to encode all quantum states. A pure state is an ensemble with only one vector thus we shall have a denstiy matrix of rank 1. Note that the density matrix encodes all the information in an ensemble. Different ensembles with the same density matrix behave identically.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mixed State (Dynamics)}
+  We can extend the notion of unitary action on pure states to density matrices as
+  \[
+    U[\rho] = U\rho U^{\dagger}
+  \]
+  However operations on Density matrices can be more general than this because we only need to have operations that preserve the trace (normalization) and preserve the positive semidefiteness. To this end we characterize a general quantum operation as a Completely Positive Trace Preserving (CPTP) map, $\mathcal{E}(\rho)$.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mixed State (Measurement)}
+  Measurement of density matrices is characterized by outcomes $o_i$ and associated measurement operators $M_i$ which must obey the criterion $\sum_i M_i^{\dagger} M_i = I$. Then we have
   
+  \begin{itemize}
+  \item  The probability of measuring outcome $o_i$ is $Tr(M_i\rho M_i^{\dagger})$.
+    
+  \item  The post measurement state is $\frac{M_i \rho M_i^{\dagger}}{tr(M_i \rho M_i^{\dagger})}$
+  \end{itemize}
+
+  For a classical observable $H$, $Tr(\rho H)$ the expectation value.
+
 \end{frame}
 
 \frame[t]{

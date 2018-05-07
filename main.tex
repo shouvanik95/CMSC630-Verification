@@ -136,9 +136,11 @@
 \frametitle{Introduction: Structure of the Talk}
 \begin{enumerate}
 \item Background Knowledge in Quantum Computation
-\begin{itemize}
-    \item (To be filled in by Shouvanik)
-\end{itemize}
+\begin{enumerate}
+\item Classical data
+\item Quantum Pure States
+\item Mixed States and Density Matrices
+\end{enumerate}
 \item Syntax and Semantics of Quantum Programs
 \begin{enumerate}
     \item Syntax
@@ -673,7 +675,7 @@ we would have to prove the inequality holds for all possible states.
 Now we are ready to define weakest precondition\bigbreak
 \begin{definition}
 Let $M \in \mathcal{P(H)}$ be a quantum predicate and  let $\mathcal{E} \in \mathcal{QO(H)}$ be a quantum operation. Then the \textbf{weakest precondition} of $M$ w.r.t. $\mathcal{E}$ is a quantum predicate $wp\mathcal{(E)}(M)$ satisfying:\bigbreak
-(i) $\{wp\mathcal{(E)}(M)\} \mathcal{E} \{M\}$ \bigbreak
+p(i) $\{wp\mathcal{(E)}(M)\} \mathcal{E} \{M\}$ \bigbreak
 (ii) for all quantum predicates $N, \{N\}\mathcal{E}\{M\} \implies N \sqsubseteq wp\mathcal{(E)}(M)$, or equivalently $tr(N\rho) \leq tr(wp\mathcal{(E)}(M)\rho)$ for all $\rho$ (i.e. $N$ is "harder to satisfy" or "stronger")
 \end{definition}
 

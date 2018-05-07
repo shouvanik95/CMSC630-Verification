@@ -150,8 +150,9 @@
 
 \item Quantum Hoare Logic
 \begin{enumerate}
-    \item (To be Filled in by Andrew)
-    \item wp and wlp for quantum programs
+    \item Predicates
+    \item Weakest Preconditions
+    \item Floyd-Hoare Logic
     \item Proof Systems for Partial Correctness
     \item Proof Systems for Total Correctness
 \end{enumerate}
@@ -543,7 +544,7 @@ We also point out that the only way for a quantum program to diverge is to inclu
 }
 
 
-% Andrew start 
+% BEGIN ANDRW 
 
 \frame[t] {
 \frametitle{Quantum Predicates: Overview}
@@ -559,6 +560,7 @@ Quantum predicates are physical observables (e.g. spin, energy, position)
     \item Represented mathematically as a Hermetian operator $M$ (commonly a matrix that is its own conjugate transpose) in a Hilbert space $\mathcal{H}$   
     \item An example of a Hilbert space is $\mathbb{C}^n$
     \item Probabilistic (i.e. range over the interval $[0,1]$)
+    \item Remember, states in quantum are (partial) density matrices typically written $\rho$
 \end{itemize}
 }
 
@@ -594,7 +596,7 @@ its eigenvalues lie in [0,1].
 \frame[t] {
 \frametitle{Quantum Predicates: Satisfaction}
 \begin{itemize}
-    \item The \textbf{trace} of a matrix $A$, denoted $tr(A)$ is the sum of the elements in the main diagonal (top left to bottom right)
+    \item The \textbf{trace} of a matrix $A$, denoted $tr(A)$ is the sum of its eigenvalues
     \bigbreak
     \item $tr(M\rho)$ is the expectation (average value) of performing the projective measurement $M$ when a quantum system is in the state $\rho$
     \bigbreak
@@ -614,8 +616,8 @@ The following are equivalent:\bigbreak
 % TODO: nail down intuitively what tr and the loewner order are
 
 \begin{lemma}
-For any observables (and therefore any quantum predicates) $M$ and $N$:\bigbreak
-$M\sqsubseteq N \iff tr(M\rho) \leq tr(N\rho)$ for all $\rho$\bigbreak
+For any observables (and therefore any quantum predicates) $M$ and $N$:
+\[M\sqsubseteq N \iff tr(M\rho) \leq tr(N\rho) \text{for all } \rho\]
 (I.e. the Loewner order of two quantum predicates is equivalent 
 to the degree to which any quantum state satisfies those predicates.) 
 \end{lemma}
@@ -646,7 +648,7 @@ We now generalize this to the quantum case, starting with the definition of a qu
 \frametitle{Quantum Predicates: Weakest Precondition}
 \begin{definition}
 Let $M, N \in \mathcal{P(H)}$ be quantum predicates and let $\mathcal{E} \in \mathcal{QO(H)}$ be a quantum operation (for example, a quantum program or program statement). Then, $M$ is called a \textbf{precondition} of $N$ w.r.t. $\mathcal{E}$, written $\{M\}\mathcal{E}\{N\}$ 
-if $tr(M\rho) \leq tr(N\rho)$ for all $\rho$.
+if $tr(M\rho) \leq tr(N\mathcal{E}(\rho))$ for all $\rho$.
 \end{definition}
 
 \textbf{Intuition:} If the start state satisfies the precondition to a certain extent, then the resulting state must satisfy the postcondition to an even greater (or equal) extent.\bigbreak
@@ -657,10 +659,10 @@ if $tr(M\rho) \leq tr(N\rho)$ for all $\rho$.
 \frametitle{Quantum Predicates: Weakest Precondition}
 Consider the triple $\{M\}\mathcal{E}\{N\}$. Let's fix $\rho$ and check the validity of some examples:
 \begin{itemize}
-    \item $tr(M\rho) = 1, tr(N\rho)$ = 1 -- maybe valid
-    \item $tr(M\rho) = 0, tr(N\rho)$ = 0 -- maybe valid
-    \item $tr(M\rho) = 0.001, tr(N\rho)$ = 0.01 -- maybe valid
-    \item $tr(M\rho) = 0.98, tr(N\rho)$ = 0.97 -- invalid!
+    \item $tr(M\rho) = 1, tr(N\mathcal{E}(\rho))$ = 1 -- maybe valid
+    \item $tr(M\rho) = 0, tr(N\mathcal{E}(\rho))$ = 0 -- maybe valid
+    \item $tr(M\rho) = 0.001, tr(N\mathcal{E}(\rho))$ = 0.01 -- maybe valid
+    \item $tr(M\rho) = 0.98, tr(N\mathcal{E}(\rho))$ = 0.97 -- invalid!
 \end{itemize}\bigbreak
 Why "maybe"? Remember, the definition quantifies over \textbf{all} $\rho$, so to prove a triple is valid,
 we would have to prove the inequality holds for all possible states.
@@ -678,6 +680,74 @@ Let $M \in \mathcal{P(H)}$ be a quantum predicate and  let $\mathcal{E} \in \mat
 \textbf{Intuition:} condition (i) means that $wp\mathcal{(E)}(M)$ is a precondition and condition (ii) means
 that whenever $N$ is also a precondition, then $wp\mathcal{(E)}(M)$ is weaker than $N$.
 }
+
+\frame[t] {
+\frametitle{Quantum Predicates: Weakest Precondition}
+The definition itself is not very useful! \bigbreak
+Luckily, we have the following theorem:
+\begin{theorem}
+Suppose the quantum operation $\mathcal{E} \in \mathcal{QO(H)}$ is represented
+by the set $\{E_i\}$ of Kraus operators, i.e. 
+\[\mathcal{E}(\rho) = \sum_i E_i\rho E_i^\dagger\]
+
+for any state $\rho$. Then, for each predicate $M\in\mathcal{P(H)}$ we have 
+$wp(\mathcal{E})(M) = \sum_iE_i^\dagger ME_i$
+\end{theorem}\bigbreak
+
+So, we have a straightforward way to compute $wp$!
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Floyd-Hoare Logic for Classical}
+Recall that in classical Floyd-Hoare logic, the correctness of a program $S$ is expressed by a valid Hoare
+triple $\{P\}S\{Q\}$ where for any $\sigma$, if $\sigma \models P$ and 
+$\langle S,\sigma\rangle \rightarrow\sigma^\prime$, then $\sigma^\prime\models Q$.\bigbreak
+We will now generalize this notion for the quantum setting.
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Floyd-Hoare Logic for Quantum}
+\begin{definition}
+A \textbf{correctness formula} is a statement of the form $\{P\}S\{Q\}$ where $S$ is a quantum program and both 
+$P, Q \in\mathcal{P(H)}$ are quantum predicates. $P$ is the precondition and $Q$ is the postcondition.
+\end{definition}
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Total vs Partial Correctness}
+\begin{itemize}
+\item There are two ways to interpret the semantics of a Hoare triple in the quantum setting, just as in
+the classical setting: total vs partial correctness
+\item Partial correctness: Hoare triple is valid, but program might not terminate
+\item Total correctness: Hoare triple is valid and the program is guaranteed to terminate
+\end{itemize}
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Total Correctness}
+\begin{definition}
+$\{P\}S\{Q\}$ is true in the sense of \textbf{total correctness}, written $\models_{tot} \{P\}S\{Q\}$, 
+if $tr(P\rho) \leq tr(Q\sem{S}(\rho))$ for all states $\rho$ where $\sem{S}$ is the semantic function of
+the quantum program $S$.
+\end{definition}
+\textbf{Note:} that the above definition is equivalent to saying that $P$ is a precondition of $Q$ 
+w.r.t $\sem{S}$.
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Partial Correctness}
+\begin{definition}
+$\{P\}S\{Q\}$ is true in the sense of \textbf{partial correctness}, written $\models_{par} \{P\}S\{Q\}$, 
+if $tr(P\rho) \leq tr(Q\sem{S}(\rho)) + (tr(\rho) - tr(\sem{S}(\rho)))$ for all states $\rho$.
+\end{definition}\bigbreak
+\textbf{Note 1:} $tr(\rho) - tr(\sem{S}(\rho))$ is the probability of non-termination.\bigbreak
+\textbf{Note 2:} Partial correctness is easier to satisfy. We just need to the 
+degree of satisfaction of the postcondition to be $\geq$ the degree of satisfaction 
+of the precondition MINUS the probability of non-termination. 
+}
+
+% END ANDRW 
+
 
 %%%%%To add
 

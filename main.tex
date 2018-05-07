@@ -169,6 +169,85 @@
 }
 
 \frame[t]{
+  \frametitle{Classical Data in Deterministic Programs}
+  
+  Consider a deterministic classical variable. In this talk we restric ourselves to boolean or integer variables. The state of a deterministic variable is completely described by specifying exactly which one of its possible values it currently holds.
+
+  Eg. $V_{bool} = 0$ or $V_{int} = 42$
+
+  A program modifies the state of the its variables using permissible operations as specified by the semantics of the data theory. (For boolean variables these are the logical gates and for integers these are the arithmetic operators.)
+
+  Most programs we have seen in class have been deterministic classical programs on quantum variables.
+}
+
+\frame[t]{
+  \frametitle{Classical Data in Randomized Programs}
+
+  The state of a randomized variable is described by a vector ccontaining the probabilities of the variable taking any of its possible values.
+  \[
+    v_{bool} =
+    \begin{bmatrix}
+      p_0 & p_1
+    \end{bmatrix}
+  \]
+  \[
+    v_int =
+    \begin{bmatrix}
+      ... & p_{-2} & p_{-1} & p_{0} & p_1 & p_2 & ...
+    \end{bmatrix}
+  \]
+
+  The conditions for a valid state are,
+  \begin{align}
+    \forall i, 0 \le p_i \le 1 \\
+    \forall i, p_i \in \mathbb{R} \\
+    \sum_i p_i = 1
+  \end{align}
+  
+  
+  The deterministic states are represented by vectors that have exactly one 1. These states form a basis for this vector space.
+
+}
+
+\frame[t] {
+  \frametitle{Dynamics of randomized Classical states}
+
+  Since the states of randomized variables are vectors they must be acted upon by linear operators. We must also ensure that the operators maintain the  normalization of the states. The linear operators that have this property are called permutation matrices.
+
+  These are matrices that have exactly one 1 in each row and each column.
+
+  eg.
+  \[
+  \begin{bmatrix}
+    0 & 0 & 0 & 1 \\
+    0 & 1 & 0 & 0 \\
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 0
+  \end{bmatrix}
+  \]
+}
+
+\begin{frame}
+  \frametitle{Quantum Data : Pure States}
+  The state of a quantum variable is described by a vector, as in the case of a randomized classical variable. These state vectors are denoted by $\ket{\psi}$ (pronounced as a ``ket'')
+  eg . $ \ket{\psi} =
+  \begin{Bmatrix}
+    a_0 & a_1
+  \end{Bmatrix} $
+
+  The normalization conditions on a quantum variable are,
+  \begin{align}
+    \forall i, a_i \in \mathbb{C}
+    \sum_i |a_i|^2 = 1
+  \end{align}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quantum Data: Pure States}
+  
+\end{frame}
+
+\frame[t]{
 \frametitle{Syntax: From Classical to Quantum}
 Recall the syntax of classical \textbf{while}-programs:
 \begin{block}{}
@@ -913,3 +992,8 @@ Li, Yangjia, and Mingsheng Ying. "Algorithmic analysis of termination problems f
 
 }
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -430,14 +430,16 @@ We also point out that the only way for a quantum program to diverge is to inclu
 \frametitle{Quantum Predicates: Overview}
 Classical predicates are truth functions over some domain
 \begin{itemize}
-    \item isEven(2) = True
-    \item isEven(3) = False
+    \item isEven(2) = 1
+    \item isEven(3) = 0
+    \item Binary (i.e. range over the set $\{0,1\}$)
 \end{itemize}
-
+\bigbreak
 Quantum predicates are physical observables (e.g. spin, energy, position) 
 \begin{itemize}
     \item Represented mathematically as a Hermetian operator $M$ (commonly a matrix that is its own conjugate transpose) in a Hilbert space $\mathcal{H}$   
     \item An example of a Hilbert space is $\mathbb{C}^n$
+    \item Probabilistic (i.e. range over the interval $[0,1]$)
 \end{itemize}
 }
 
@@ -453,18 +455,110 @@ The \textbf{eigenspace} of $M$ corresponding to $\lambda$ is
 $X_\lambda = \{ \ket{\psi} \in \mathcal{H} : M\ket{\psi} = \lambda\ket{\psi}\}$. I.e. if you fix the eigenvalue $\lambda$ for
 $M$, all the corresponding eigenvectors form a subspace.
 \end{definition}
-\textbf{Fact:} all eigenvalues of a Hermetian operator $M$ are real
 
+\textbf{Fact:} all eigenvalues of a Hermetian operator $M$ are real.\\
+\textbf{Intuition:} given an eigenspace $X_\lambda$ for a quantum predicate $M$, the truth value of $M$ for states in that 
+subspace is the corresponding eigenvalue $\lambda$.\\
+\textbf{Goal:} since quantum systems are probabilistic, we want truth values ranging over the real interval $[0,1]$.\\
 }
 
+\frame[t] {
+\frametitle{Quantum Predicates: Definition}
+\begin{definition}
+A \textbf{quantum predicate} in a Hilbert space $\mathcal{H}$ is a Hermetian operator $M\in\mathcal{H}$ s.t. all
+its eigenvalues lie in [0,1]. 
+\end{definition}
+\bigbreak
+\textbf{Notation:} Let $\mathcal{P(H)}$ denote the set of call predicates in $\mathcal{H}$.
+}
 
+\frame[t] {
+\frametitle{Quantum Predicates: Satisfaction}
+\begin{itemize}
+    \item The \textbf{trace} of a matrix $A$, denoted $tr(A)$ is the sum of the elements in the main diagonal (top left to bottom right)
+    \bigbreak
+    \item $tr(M\rho)$ is the expectation (average value) of performing the projective measurement $M$ when a quantum system is in the state $\rho$
+    \bigbreak
+    \item $tr(M\rho)$ is interpreted as the degree to which the quantum state $\rho$ satisfies the quantum predicate $M$ (closer to 0 is "more false" and closer to 1 is "more true")
+\end{itemize}
+}
 
+\frame[t] {
+\frametitle{Quantum Predicates: Equivalence Lemmas}
+\begin{lemma}
+The following are equivalent:\bigbreak
+(i) $M\in\mathcal{P(H)}$ ($M$ is a quantum predicate) \bigbreak
+(ii) $0_\mathcal{H} \sqsubseteq M \sqsubseteq I_\mathcal{H}$ ($0_\mathcal{H}$ and $I_\mathcal{H}$ are 0 and identity operators)\bigbreak
+(iii) $0 \leq tr(M\rho) \leq$ 1 ($\rho$ is a state in $\mathcal{H}$)
+\end{lemma}
 
+% TODO: nail down intuitively what tr and the loewner order are
 
+\begin{lemma}
+For any observables (and therefore any quantum predicates) $M$ and $N$:\bigbreak
+$M\sqsubseteq N \iff tr(M\rho) \leq tr(N\rho)$ for all $\rho$\bigbreak
+(I.e. the Loewner order of two quantum predicates is equivalent 
+to the degree to which any quantum state satisfies those predicates.) 
+\end{lemma}
+}
 
+\frame[t] {
+\frametitle{Quantum Predicates: Simple Example -- Logical "OR"}
+Suppose we have a 2-qubit system and we want to build a predicate for logical OR (first OR second qubit is 1)
+\begin{itemize}
+    \item Our predicate is $M_{OR} := \ket{11}\bra{11} +  \ket{10}\bra{10} + \ket{01}\bra{01}$
+    \item Intuitively, we have a sum term for the cases where both, first, or second qubits are 1
+    \item For pure state $\ket{\psi} = \ket{11}$ (so $\rho = \ket{11}\bra{11}$) we compute $tr(M\rho) = 1$ (completely true!)
+    \item For pure state $\ket{\psi} = \ket{00}$ (so $\rho = \ket{00}\bra{00}$) we compute $tr(M\rho) = 0$ (completely false)
+    \item For mixed state $\rho = (\ket{00}\bra{01} +  \ket{10}\bra{11} + 2\ket{11}\bra{11} + \ket{00}\bra{00})/3$ we compute $tr(M\rho) = 2/3$ (pretty true)
+\end{itemize}
+}
 
+\frame[t] {
+\frametitle{Quantum Predicates: Weakest Precondition}
+Recall classical weakest preconditions: given some post condition $Q$ and a program $S$, 
+the weakest precondition of $Q$ w.r.t. $S$ is the predicate $P$ such that $\{P\}S\{Q\}$ is a valid Hoare
+triple and whenever $\{P'\}S\{Q\}$ is a valid Hoare triple, it is the case that $P'\implies P$.\bigbreak
 
+We now generalize this to the quantum case, starting with the definition of a quantum precondition.
+}
 
+\frame[t] {
+\frametitle{Quantum Predicates: Weakest Precondition}
+\begin{definition}
+Let $M, N \in \mathcal{P(H)}$ be quantum predicates and let $\mathcal{E} \in \mathcal{QO(H)}$ be a quantum operation (for example, a quantum program or program statement). Then, $M$ is called a \textbf{precondition} of $N$ w.r.t. $\mathcal{E}$, written $\{M\}\mathcal{E}\{N\}$ 
+if $tr(M\rho) \leq tr(N\rho)$ for all $\rho$.
+\end{definition}
+
+\textbf{Intuition:} If the start state satisfies the precondition to a certain extent, then the resulting state must satisfy the postcondition to an even greater (or equal) extent.\bigbreak
+\textbf{Remember:} $tr(X\rho)$ is the "degree to which state $\rho$ satisfies quantum predicate $X$
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Weakest Precondition}
+Consider the triple $\{M\}\mathcal{E}\{N\}$. Let's fix $\rho$ and check the validity of some examples:
+\begin{itemize}
+    \item $tr(M\rho) = 1, tr(N\rho)$ = 1 -- maybe valid
+    \item $tr(M\rho) = 0, tr(N\rho)$ = 0 -- maybe valid
+    \item $tr(M\rho) = 0.001, tr(N\rho)$ = 0.01 -- maybe valid
+    \item $tr(M\rho) = 0.98, tr(N\rho)$ = 0.97 -- invalid!
+\end{itemize}\bigbreak
+Why "maybe"? Remember, the definition quantifies over \textbf{all} $\rho$, so to prove a triple is valid,
+we would have to prove the inequality holds for all possible states.
+}
+
+\frame[t] {
+\frametitle{Quantum Predicates: Weakest Precondition}
+Now we are ready to define weakest precondition\bigbreak
+\begin{definition}
+Let $M \in \mathcal{P(H)}$ be a quantum predicate and  let $\mathcal{E} \in \mathcal{QO(H)}$ be a quantum operation. Then the \textbf{weakest precondition} of $M$ w.r.t. $\mathcal{E}$ is a quantum predicate $wp\mathcal{(E)}(M)$ satisfying:\bigbreak
+(i) $\{wp\mathcal{(E)}(M)\} \mathcal{E} \{M\}$ \bigbreak
+(ii) for all quantum predicates $N, \{N\}\mathcal{E}\{M\} \implies N \sqsubseteq wp\mathcal{(E)}(M)$, or equivalently $tr(N\rho) \leq tr(wp\mathcal{(E)}(M)\rho)$ for all $\rho$ (i.e. $N$ is "harder to satisfy" or "stronger")
+\end{definition}
+
+\textbf{Intuition:} condition (i) means that $wp\mathcal{(E)}(M)$ is a precondition and condition (ii) means
+that whenever $N$ is also a precondition, then $wp\mathcal{(E)}(M)$ is weaker than $N$.
+}
 
 %%%%%To add
 

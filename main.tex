@@ -66,6 +66,7 @@
 
 %\usepackage[colorlinks,citecolor=blue]{hyperref}
 %\usepackage{amsthm}
+%\usepackage{amssymb}
 %\newtheorem{theorem}{Theorem} %[section]
 %\newtheorem{lemma}[theorem]{Lemma}
 %%\newtheorem{proposition}[theorem]{Proposition}
@@ -344,9 +345,38 @@ We also point out that the only way for a quantum program to diverge is to inclu
 }
 
 
+% Andrew start 
 
+\frame[t] {
+\frametitle{Quantum Predicates: Overview}
+Classical predicates are truth functions over some domain
+\begin{itemize}
+    \item isEven(2) = True
+    \item isEven(3) = False
+\end{itemize}
 
+Quantum predicates are physical observables (e.g. spin, energy, position) 
+\begin{itemize}
+    \item Represented mathematically as a Hermetian operator $M$ (commonly a matrix that is its own conjugate transpose) in a Hilbert space $\mathcal{H}$   
+    \item An example of a Hilbert space is $\mathbb{C}^n$
+\end{itemize}
+}
 
+\frame[t] {
+\frametitle{Quantum Predicates: Eigenvalues}
+\begin{definition}
+If $\lambda \in \mathbb{C}$ and $\ket{\psi} \in \mathcal{H}, \ket{\psi} \ne 0$ satisfy $M\ket{\psi} = \lambda\ket{\psi}$, then $\lambda$
+is an \textbf{eigenvalue} of $M$ and $\ket{\psi}$ is the \textbf{eigenvector} of $M$ corresponding to $\ket{\psi}$.
+\end{definition}
+
+\begin{definition}
+The \textbf{eigenspace} of $M$ corresponding to $\lambda$ is 
+$X_\lambda = \{ \ket{\psi} \in \mathcal{H} : M\ket{\psi} = \lambda\ket{\psi}\}$. I.e. if you fix the eigenvalue $\lambda$ for
+$M$, all the corresponding eigenvectors form a subspace.
+\end{definition}
+\textbf{Fact:} all eigenvalues of a Hermetian operator $M$ are real
+
+}
 
 
 

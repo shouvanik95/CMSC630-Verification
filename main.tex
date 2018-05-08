@@ -132,44 +132,7 @@
 \frame{\titlepage}
 
 %\section{Background}
-\frame[t]{
-\frametitle{Introduction: Structure of the Talk}
-\begin{enumerate}
-\item Background Knowledge in Quantum Computation
-\begin{enumerate}
-\item Classical data
-\item Quantum Pure States
-\item Mixed States and Density Matrices
-\end{enumerate}
-\item Syntax and Semantics of Quantum Programs
-\begin{enumerate}
-    \item Syntax
-    \item Operational Semantics
-    \item Denotational Semantics
-\end{enumerate}
 
-%\hskip
-
-\item Quantum Hoare Logic
-\begin{enumerate}
-    \item Predicates
-    \item Weakest Preconditions
-    \item Floyd-Hoare Logic
-    \item Proof Systems for Partial Correctness
-    \item Proof Systems for Total Correctness
-\end{enumerate}
-
-%\hskip
-\item Case Study: the Grover Search Algorithm
-
-
-\item Linear-Ranking Super Martingale (LRSM): a Ranking Function (if time permits)
-%\begin{enumerate}
-%    \item 
-%    \item 
-%\end{enumerate}
-\end{enumerate}
-}
 
 \frame[t]{
   \frametitle{Classical Data in Deterministic Programs}
@@ -414,11 +377,8 @@ We obtain the following syntax for quantum \textbf{while}-programs:
 where:
 \begin{itemize}
     \item  $q_i:=\ket{0}$ initializes the quantum variable $q_i$ with $\ket{0}$;
-    \pause
     \item $\overline{q}:=U[\overline{q}]$ performs the \emph{unitary transformation} on the register $\overline{q}$;
-    \pause
     \item $\qif{\square m\cdot M[\overline{q}]=m}{S_m}$ performs the \emph{measurement} $M = \{M_m\} = \{M_{m_1},\cdots, M_{m_n}\}$ on $\overline{q}$, and executes $S_{m_i}$ when measurement results in $m_i$;
-    \pause
     \item $\qwhile{M[\overline{q}]=1}{S} $ performs the \emph{measurement} $M=\{M_0,M_1\}$, executes loop body $S$ if the outcome is $1$ (and exits loop otherwise).
     
 \end{itemize}
@@ -439,16 +399,13 @@ The operational semantics are given by the following transition rules:
 Remark:
 \begin{enumerate}
     \item $E$ denotes the empty program, and $U\rho U^\dagger$ evolves the state $\rho$ with the unitary $U$;
-    \pause 
     \item $\ket{0}_q$ $_q\bra{i}$ is tensored with identity on other qubits.
     \pause 
     \item When applying the IF rule, the program executes $S_{m_i}$ iff the measurement outcome is $m_i$, which occurs with probability $p_{m_i} = \tr(M_{m_i}\rho M_{m_i}^\dagger)$. 
-    \pause 
     
     In this case, the post-measurement state (before executing $S_{m_i}$) is $\rho_{m_i} = \dfrac{M_{m_i}\rho M_{m_i}^\dagger}{p_{m_i}}$. Thus our IF rule is equivalent to: \begin{align*}
         \infer[(IF)]{(\qif{\square m\cdot M[\overline{q}]=m}{S_m})\xrightarrow{p_m} (S_m,\rho_m)}{}
     \end{align*}
-    \pause 
     \item $L_0$ and $L_1$ describes the transition rules for exiting or continuing the loop respectively.
 \end{enumerate}
 }
@@ -503,8 +460,8 @@ Denoting $\rho:=\ket{0}_{all}\bra{0}$, it can be computed that $\sem{S}(\rho) = 
 \frametitle{Denotational Semantics}
 %\begin{block}{Complete Partial Order (CPO) on Operators and Quantum Operations}
 \begin{itemize}
-    \item Recall from our class that a Complete Partial Order (CPO) on a set $S$ is a partial order with a least element, s.t. for each increasing sequence $\{x_n\}$ there exists a least upper bound: $\bigsqcup_{n=0}^\infty x_n\in S$.\pause 
-    \item For a Hilbert space $\H$, the \emph{L\"{o}wner order} $\sqsubseteq$ is defined on the set of linear operators on $\H$ (which by definition contains $\dhnall$) by $A\sqsubseteq B\iff B-A\succeq 0$ (i.e., $B-A$ is a positive semidefinite operator). \pause
+    \item Recall from our class that a Complete Partial Order (CPO) on a set $S$ is a partial order with a least element, s.t. for each increasing sequence $\{x_n\}$ there exists a least upper bound: $\bigsqcup_{n=0}^\infty x_n\in S$. 
+    \item For a Hilbert space $\H$, the \emph{L\"{o}wner order} $\sqsubseteq$ is defined on the set of linear operators on $\H$ (which by definition contains $\dhnall$) by $A\sqsubseteq B\iff B-A\succeq 0$ (i.e., $B-A$ is a positive semidefinite operator). 
     \item We denote by $\qoh$ the set of quantum operations in $\H$.\pause
 \end{itemize}
 With some effort one obtains: \footnote{For proof details, see Section $3.6$ of M. Ying, Foundations of Quantum Programming.}
@@ -592,7 +549,7 @@ A \textbf{quantum predicate} in a Hilbert space $\mathcal{H}$ is a Hermetian ope
 its eigenvalues lie in [0,1]. 
 \end{definition}
 \bigbreak
-\textbf{Notation:} Let $\mathcal{P(H)}$ denote the set of call predicates in $\mathcal{H}$.
+\textbf{Notation:} Let $\mathcal{P(H)}$ denote the set of all predicates in $\mathcal{H}$.
 }
 
 \frame[t] {
@@ -772,12 +729,11 @@ The weakest precondition of a quantum program $S$ with respect to a post-conditi
 \frametitle{Weakest Preconditions of Quantum Programs}
 \begin{enumerate}
     \item Intuitively, conditions $(a)$ require $wp.S.P$ to be indeed a precondition of $S$ with respect to $P$, and $(b)$ requires $wp.S.P$ to be ``weakest''.
-\pause 
     \item It is also intuitive from the definition that the weakest liberal condition does not guarantee $S$ to converge.
 \pause 
     \item By comparing the definitions of weakest preconditions of quantum programs and quantum operations we obtain the following equality $$wp.S.P = wp(\sem{S})(P),$$
 
-where we consider $\sem{S}:\dhall\to \dhall$ as a quantum operation. 
+where on the right hand side we consider $\sem{S}:\dhall\to \dhall$ as a quantum operation. 
 \end{enumerate}
 }
 
@@ -809,7 +765,7 @@ The formula above gives the following ``trace preservation'' property:
 
 \pause Recall that satisfying weakest precondition guarantees convergence.
 
-\pause Also cf.: $$\vDash_{tot} \{Q\}S\{P\}\implies \forall\rho.\tr(Q\rho)\leq \tr(P\sem{S}(\rho))$$
+Also cf.: $$\vDash_{tot} \{Q\}S\{P\}\implies \forall\rho.\tr(Q\rho)\leq \tr(P\sem{S}(\rho))$$
 }
 
 
@@ -825,7 +781,6 @@ $$wp.\qwhilecanonical.P = \bigsqcap_{n=0}^\infty P_n,$$ where
     P_{n+1} = &M_0^\dagger PM_0 + M_1^\dagger (wlp.S.P_n) M_1\ (n\geq 0)
  \end{array}\right.
 \end{equation*}
-\pause
 
 Main proof technique is still induction on $n$ and application of properties of trace, with the attention that $P\sqsubseteq I_\mathcal{H}\in \phall\implies I_\mathcal{H}-P\succeq 0_\mathcal{H}$.
 
@@ -841,7 +796,7 @@ The structural representations above also gives the following trace-preservation
 
 \pause One may observe immediately that the difference between wlp and wp essentially lies in the divergence probability $\tr(\rho)-\tr(\sem{S}(\rho))$.
 
-\pause And likewise, the comparison $$\vDash_{par} \{Q\}S\{P\}\implies \forall\rho.\tr(Q\rho)\leq \tr(P\sem{S}(\rho))+\tr(\rho)-\tr(\sem{S}(\rho))$$ evinces the tightness of this liberal precondition.
+And likewise, the comparison $$\vDash_{par} \{Q\}S\{P\}\implies \forall\rho.\tr(Q\rho)\leq \tr(P\sem{S}(\rho))+\tr(\rho)-\tr(\sem{S}(\rho))$$ evinces the tightness of this liberal precondition.
 }
 
 
@@ -856,55 +811,29 @@ The structural representations above also gives the following trace-preservation
 }
 
 \frame[t]{
-\frametitle{Proof Systems for Partial Correctness: Soundness}
+\frametitle{Proof Systems for Partial Correctness Is Sound and Complete}
 %We verify that 
+
+By induction on program structures (as well as number of iterations in the case of the \textbf{while}-loop) with application of trace properties, one may find:
+ 
 \begin{theorem}[Soundness of qPD]
 $\vdash_{qPD}\{Q\}S\{P\}\implies\vDash_{par}\{Q\}S\{P\}$.
-\end{theorem} %by induction on structure of the program $S$. It suffices to show that the three axioms are valid in the sense of partial correctness, and the inference rules preserve partial correctness.
+\end{theorem}
 
-Proof sketch: 
-\begin{enumerate}
-    \item verification of partial correctness of the three axioms are mostly from definition. E.g.: Ax-In uses linearity and circularity of trace as well as structure representation of $q:=\ket{0}$ to verify that $\tr[(\sum_{n=-\infty}^\infty \ket{n}_q \bra{0} P \ket{0}_q \bra{n})\rho] = \tr(P\sem{q:=\ket{0}}(\rho))$. 
-    \item R-SC, R-IF and R-Or uses similar properties of trace.
-    \pause 
-    \item For R-LP, intuitively (and roughly) it says ``if the loop may be entered with precondition $Q$ satisfied, then in the cases where the loop converges, upon exiting the post-condition $P$ shall be satisfied.''
-\end{enumerate}
-}
+and 
 
-\frame[t]{
-\frametitle{Proof Systems for Partial Correctness: Soundness}
-
-(Proof sketch, continued)
-
-We translate the assumption $$\vDash_{par}\{Q\}S\{M_0^\dagger PM_0 + M_1^\dagger QM_1\}$$
-into inequality between traces, make an induction on $n$ to show that \begin{equation*}
-    \left.\begin{array}{ll}
-    \tr[(M_0^\dagger PM_0 + M_1^\dagger QM_1 )\rho ]\leq & \tr(P\sum_{k=0}^n (\E_0\circ (S\circ \E_1)^k)(\rho))
- \\
- +& [\tr\rho - \tr(\sum_{k=0}^n(\E_0\circ (S\circ \E_1)^k)(\rho))],
- \end{array}\right.
-\end{equation*}. and finally let $n\to \infty$. Here $\E_i(\cdot) = M_i(\cdot) M_i^\dagger $ as defined above.
-}
-
-
-
-
-\frame[t]{
-\frametitle{Proof Systems for Partial Correctness: Completeness}
-%We verify that 
 \begin{theorem}[Completeness of qPD]
 $\vDash_{par}\{Q\}S\{P\}\implies\vdash_{qPD}\{Q\}S\{P\}$.
 \end{theorem}
+ %by induction on structure of the program $S$. It suffices to show that the three axioms are valid in the sense of partial correctness, and the inference rules preserve partial correctness.
 
-
-Proof sketch: mostly by direct application of the rules and by induction on structure of $S$. For the \textbf{while}-loop,  one applies the following observation\footnote{which is a corollary of explicit representation of wlp from last section.}:
-
-$$wlp.\textbf{while}.P = M_0^\dagger P M_0 + M_1^\dagger (wlp.S.(wlp.\textbf{while}.P))M_1$$
-
-to deduce $$\vdash_{qPD}\{wlp.\textbf{while}.P\}\textbf{while}\{P\},$$
-
-then apply the R-Or rule.
 }
+
+
+
+
+
+
 
 
 \frame[t]{
@@ -933,7 +862,6 @@ Let $P\in\phall$, $\varepsilon >0$, $t:\dhall \to \mathbb{N}$. $t$ is \emph{$(P,
     \item $\tr(P\rho)\geq \varepsilon \implies t(\sem{S}(M_1\rho M_1^\dagger))< t(\rho)$.
 \end{enumerate}
 \end{definition}
-\pause 
 We have the following technical lemma:
 \begin{lemma}
 Let $P\in\phall$. The following are equivalent:
@@ -947,7 +875,7 @@ Let $P\in\phall$. The following are equivalent:
 
 
 \frame[t]{
-\frametitle{Proof Systems for Total Correctness: Soundness and Completeness}
+\frametitle{Proof Systems for Total Correctness Is  Sound and Complete}
 
 \begin{theorem}[Soundness of qTD]
 $\vdash_{qTD}\{Q\}S\{P\}\implies\vDash_{tot}\{Q\}S\{P\}$.
@@ -971,7 +899,6 @@ The Grover Search Algorithm solves the following problem:
 0.88\textwidth]{GroverTask}%\caption{Transition Rules of Quantum \textbf{while}-Programs}
 \end{figure}
 
-\pause 
 
 Best classical algorithm has time complexity $\Theta(n)$, while the following quantum algorithm finishes the task in time $O(\sqrt{n})$ with success probability $p_{succ}\geq \dfrac{N-M}{N}$.
 }
@@ -1062,7 +989,6 @@ Thus we conclude that the quantum loop (and with some more effort, the entire Gr
 \frametitle{An Introduction to LRSM}
 \begin{itemize}
     \item Roughly speaking, an LRSM is a generalization of the concept of $(P,\varepsilon)$-bounded function where the codomain is now non-discrete and the function is with respect to loop invariants. 
-\pause 
     \item Quantum loop invariants can be either additive or multiplicative. We only introduce the additive ones here, which are believed to be easier to find.
     \item In the following definitions, ``locations'' refer to locations in the graph representation of quantum programs.\footnote{ For more details, see Y. Li, M. Ying, Algorithmic analysis of termination problems for quantum programs. PACMPL 2(POPL): 35:1-35:29 (2018)}
 \end{itemize}

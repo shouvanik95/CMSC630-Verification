@@ -710,33 +710,6 @@ of the precondition MINUS the probability of non-termination.
 
 %%%%%To add
 
-
-\frame[t]{
-\frametitle{Quantum Hoare Logic: Weakest Preconditions of Quantum Programs}
-
-The weakest precondition of a quantum program $S$ with respect to a post-condition $P\in\phall$ is defined analogously (and compatibly) to corresponding notions defined above for quantum operations.\footnote{By Proposition $3.3.6$, for every $\E\in \qohall$ one may design a quantum program $S$.}
-
-\begin{figure}[H]\label{crg4}
-\includegraphics[height=0.4%93024
-\textheight,width=%0.989184
-1.0\textwidth]{WPCProgram1}%\caption{Transition Rules of Quantum \textbf{while}-Programs}
-\end{figure}
-%\pause
- %(any other precondition ``implies'' it).
-}
-
-\frame[t]{
-\frametitle{Weakest Preconditions of Quantum Programs}
-\begin{enumerate}
-    \item Intuitively, conditions $(a)$ require $wp.S.P$ to be indeed a precondition of $S$ with respect to $P$, and $(b)$ requires $wp.S.P$ to be ``weakest''.
-    \item It is also intuitive from the definition that the weakest liberal condition does not guarantee $S$ to converge.
-\pause 
-    \item By comparing the definitions of weakest preconditions of quantum programs and quantum operations we obtain the following equality $$wp.S.P = wp(\sem{S})(P),$$
-
-where on the right hand side we consider $\sem{S}:\dhall\to \dhall$ as a quantum operation. 
-\end{enumerate}
-}
-
 \frame[t]{
 \frametitle{Weakest Preconditions of Quantum Programs}
 
